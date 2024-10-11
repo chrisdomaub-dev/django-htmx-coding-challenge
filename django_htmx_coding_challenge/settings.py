@@ -148,5 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # User Invite settings
 USER_INVITE_EXPIRATION_DAYS = 7
-SENDING_DOMAIN = 'example.com'
+USER_INVITE_INTERVAL_MINUTES = 1
+# SENDING_DOMAIN = 'example.com'
+SENDING_DOMAIN = 'http://localhost:8000'
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

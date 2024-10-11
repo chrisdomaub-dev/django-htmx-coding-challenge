@@ -23,9 +23,10 @@ class UserInvitation(models.Model):
     expires_at = models.DateTimeField(default=get_expiration_datetime)
 
     def send_invitation_email(self):
+        # I changed the message to simulate link to localhost invitation link
         send_mail(
             "You have been invited to join our platform",
-            f"Click here to join: { settings.SENDING_DOMAIN }/invite/{self.id}",
+            f"Click here to join: { settings.SENDING_DOMAIN }/accept-invite?invite_id={self.id}",
             "Kind regards, The Team",
             [self.email],
         )
