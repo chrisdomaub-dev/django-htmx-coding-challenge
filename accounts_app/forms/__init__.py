@@ -1,3 +1,4 @@
 from .sign_in_form import SignInForm
 from .edit_user_form import EditUserForm
 from .invite_user_form import InviteUserForm
+from .accept_invite_form import AcceptInviteForm

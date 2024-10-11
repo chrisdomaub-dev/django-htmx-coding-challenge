@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container m-auto">
+    <div class="w-full flex flex-col justify-center items-center">
+        <div class="mt-3 flex flex-col w-2/5 bg-white border border-gray-200 shadow-sm rounded-xl p-4 md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+
+            {% if messages %}
+            <div class="messages mt-10">
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="bg-green-200 border border-green-600 text-sm text-black rounded-lg p-4 mb-4" role="alert">
+                            <span class="font-bold">{% translate "Success!" %}</span> {{ message }}
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="bg-red-200 border border-red-600 text-sm text-black rounded-lg p-4 mb-4" role="alert">
+                            <span class="font-bold">{% translate "Error!" %}</span> {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if invite_state == "invalid" %}
+                <div class="text-center">
+                    <h1 class="mt-10 text-xl text-red-500"><b>Invalid Invitation!</b></h1>
+                    <p class="my-3 text-slate-500">It seems the link provided does not match any invitation.</p>
+                </div>
+            {% elif invite_state == "expired" %}
+                <div class="text-center">
+                    <h1 class="mt-10 text-xl text-red-500"><b>Expired Invitation!</b></h1>
+                    <p class="my-3 text-slate-500">It seems your invitation has expired.</p>
+                </div>
+            {% else %}
+                <h1 id="invite_accept_header" class="mt-10 text-xl">Welcome, {{ invite.email }}!</h1>
+                <p class="my-3 text-slate-500">Please fill-up the form below to finalize you account.</p>
+                <form
+                    id="invite_accept_form"
+                    hx-post="{% url 'accept_invite' %}"
+                    hx-target="body"
+                >
+                    {% csrf_token %}
+                    <div class="mt-3 max-w">
+                        <input type="hidden" name="invite_id" value="{{invite.id}}" readonly required />
+                        <label for="email" class="block text-sm font-medium mb-2 dark:text-white">{% translate "Email" %}</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                            value="{{ invite.email }}"
+                            readonly
+                            required
+                        >
+                    </div>
+                    <div class="mt-3 max-w">
+                        <label for="first_name" class="block text-sm font-medium mb-2 dark:text-white">{% translate "First Name" %}</label>
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                            value="{{form.first_name.value}}"
+                            required
+                        >
+                    </div>
+                    <div class="mt-3 max-w">
+                        <label for="last_name" class="block text-sm font-medium mb-2 dark:text-white">{% translate "Last Name" %}</label>
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                            value="{{form.last_name.value}}"
+                            required
+                        >
+                    </div>
+                    <div class="mt-3 max-w">
+                        <label for="occupation" class="block text-sm font-medium mb-2 dark:text-white">{% translate "Occupation" %}</label>
+                        <input
+                            type="text"
+                            id="occupation"
+                            name="occupation"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                            value="{{form.occupation.value}}"
+                            required
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <label for="password" class="block text-sm font-medium mb-2 dark:text-white">{% translate "Password" %}</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                            value="{{form.password.value}}"
+                            required
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <label for="confirm_password" class="block text-sm font-medium mb-2 dark:text-white">{% translate "Confirm Password" %}</label>
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                            value="{{form.confirm_password.value}}"
+                            required
+                        >
+                    </div>
+                    <div class="flex justify-center">
+                        <button
+                            type="submit"
+                            class="mt-5 m-auto py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-primary text-white hover:bg-primary-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                            Register Profile
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

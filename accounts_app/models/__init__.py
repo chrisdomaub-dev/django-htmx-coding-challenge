@@ -1,2 +1,2 @@
 from .user import User, UserManager
-from .user_inivtation import UserInvitation
+from .user_invitation import UserInvitation
